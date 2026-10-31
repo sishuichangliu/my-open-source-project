@@ -1,6 +1,7 @@
 name: Sign with Sigstore
 
 on:
+  workflow_dispatch:
   push:
     tags:
       - 'v*' # 只有在推送 v 开头的标签时才会触发
