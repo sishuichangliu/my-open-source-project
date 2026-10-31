@@ -1,0 +1,28 @@
+name: Sign with Sigstore
+
+on:
+  push:
+    tags:
+      - 'v*' # 只有在推送 v 开头的标签时才会触发
+
+jobs:
+  sign:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write   # 必须写，这是用于 OIDC 身份验证的
+      contents: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install cosign
+        uses: sigstore/cosign-installer@v3
+
+      - name: Sign blob
+        run: |
+          # 假设你要签名的文件叫 artifact.txt，如果没有，先建一个模拟一下
+          echo "Hello Sigstore" > artifact.txt
+          cosign sign-blob --yes \
+            --bundle artifact.sigstore.json \
+            artifact.txt
